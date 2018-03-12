@@ -23,6 +23,7 @@ ROOT_DIR = os.path.dirname(BASE_DIR)
 SECRET_DIR = os.path.join(ROOT_DIR, '.secrets')
 SECRET_BASE = os.path.join(SECRET_DIR, 'base.json')
 SECRET_LOCAL = os.path.join(SECRET_DIR, 'local.json')
+SECRET_DEV = os.path.join(SECRET_DIR, 'dev.json')
 
 secrets = json.loads(open(SECRET_BASE, 'rt').read())
 
@@ -90,7 +91,7 @@ def set_config(obj, start=False):
         # list 아이템을 순회하며
         for index, item in enumerate(obj):
             # list의 해당 index 에 item을 평가한 값을 할당
-            obj[index] = eval(item)
+            obj[index] = eval_obj(item)
 
 
 # set_config에서 'raven' 모듈을 필요로 하나, 이 모듈의 다른 부분에서 사용하지 않음
@@ -101,6 +102,7 @@ set_config(secrets, start=True)
 
 STATIC_URL = '/static/'
 
+AUTH_USER_MODEL = 'members.User'
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -109,8 +111,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'members',
+
     'raven.contrib.django.raven_compat',
-    'django_extensions',
+
+
 ]
 
 MIDDLEWARE = [
