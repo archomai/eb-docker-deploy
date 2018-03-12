@@ -22,30 +22,22 @@ ROOT_DIR = os.path.dirname(BASE_DIR)
 
 # static
 STATIC_URL = '/static/'
-# STATIC_ROOT = os.path.join(ROOT_DIR, '.static')
-# MEDIA_URL = '/media/'
-# MEDIA_ROOT = os.path.join(ROOT_DIR, '.media')
-#
-# STATIC_DIR = os.path.join(BASE_DIR, 'static')
-# STATICFILES_DIRS = [
-#     STATIC_DIR,
-# ]
+STATIC_ROOT = os.path.join(ROOT_DIR, '.static')
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(ROOT_DIR, '.media')
+
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [
+    STATIC_DIR,
+]
 
 SECRET_DIR = os.path.join(ROOT_DIR, '.secrets')
 SECRET_BASE = os.path.join(SECRET_DIR, 'base.json')
 SECRET_LOCAL = os.path.join(SECRET_DIR, 'local.json')
 SECRET_DEV = os.path.join(SECRET_DIR, 'dev.json')
+SECRET_PRODUCTION = os.path.join(SECRET_DIR, 'production.json')
 
 secrets = json.loads(open(SECRET_BASE, 'rt').read())
-
-# AWS
-AWS_ACCESS_KEY_ID = secrets['AWS_ACCESS_KEY_ID']
-AWS_SECRET_ACCESS_KEY = secrets['AWS_SECRET_ACCESS_KEY']
-AWS_STORAGE_BUCKET_NAME = secrets['AWS_STORAGE_BUCKET_NAME']
-# 파일의 읽기권한을 없앰 (private : get parameter 를 주어야 인증)
-AWS_DEFAULT_ACL = 'private'
-AWS_S3_REGION_NAME = 'ap-northeast-2'
-AWS_S3_SIGNATURE_VERSION = 's3v4'
 
 
 def set_config(obj, module_name=None, start=False):
