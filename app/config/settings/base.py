@@ -20,6 +20,17 @@ import sys
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 ROOT_DIR = os.path.dirname(BASE_DIR)
 
+# static
+STATIC_URL = '/static/'
+# STATIC_ROOT = os.path.join(ROOT_DIR, '.static')
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(ROOT_DIR, '.media')
+#
+# STATIC_DIR = os.path.join(BASE_DIR, 'static')
+# STATICFILES_DIRS = [
+#     STATIC_DIR,
+# ]
+
 SECRET_DIR = os.path.join(ROOT_DIR, '.secrets')
 SECRET_BASE = os.path.join(SECRET_DIR, 'base.json')
 SECRET_LOCAL = os.path.join(SECRET_DIR, 'local.json')
@@ -27,8 +38,17 @@ SECRET_DEV = os.path.join(SECRET_DIR, 'dev.json')
 
 secrets = json.loads(open(SECRET_BASE, 'rt').read())
 
+# AWS
+AWS_ACCESS_KEY_ID = secrets['AWS_ACCESS_KEY_ID']
+AWS_SECRET_ACCESS_KEY = secrets['AWS_SECRET_ACCESS_KEY']
+AWS_STORAGE_BUCKET_NAME = secrets['AWS_STORAGE_BUCKET_NAME']
+# 파일의 읽기권한을 없앰 (private : get parameter 를 주어야 인증)
+AWS_DEFAULT_ACL = 'private'
+AWS_S3_REGION_NAME = 'ap-northeast-2'
+AWS_S3_SIGNATURE_VERSION = 's3v4'
 
-def set_config(obj, start=False):
+
+def set_config(obj, module_name=None, start=False):
     """
     python객체를 받아, 해당 객체의 key-value쌍을
     현재 모듈(config.settings.base)에 동적으로 할당
@@ -84,7 +104,7 @@ def set_config(obj, start=False):
                 obj[key] = eval_obj(value)
             # set_config()가 처음 호출된 loop에서만 setattr()을 실행
             if start:
-                setattr(sys.modules[__name__], key, value)
+                setattr(sys.modules[module_name], key, value)
 
     # 전달된 객체가 'list' 형태일 경우
     elif isinstance(obj, list):
@@ -98,9 +118,7 @@ def set_config(obj, start=False):
 # import raven이라고 쓸 경우 Code reformating에서 필요없는 import로 인식해서 지워짐
 # raven 모듈을 importlib을 사용해 가져온 후 현재 모듈에 'raven'이라는 이름으로 할당
 setattr(sys.modules[__name__], 'raven', importlib.import_module('raven'))
-set_config(secrets, start=True)
-
-STATIC_URL = '/static/'
+set_config(secrets, module_name=__name__, start=True)
 
 AUTH_USER_MODEL = 'members.User'
 INSTALLED_APPS = [
@@ -114,7 +132,6 @@ INSTALLED_APPS = [
     'members',
 
     'raven.contrib.django.raven_compat',
-
 
 ]
 
