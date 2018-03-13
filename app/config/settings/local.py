@@ -9,11 +9,6 @@ INSTALLED_APPS += [
 ]
 
 
-# static
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(ROOT_DIR, '.static')
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(ROOT_DIR, '.media')
 
 DATABASES = {
     'default': {
