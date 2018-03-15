@@ -122,6 +122,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'members',
+    'utils',
 
     'raven.contrib.django.raven_compat',
 
